@@ -91,81 +91,9 @@
 
 <p>在医美消费热潮下，光鲜亮丽的效果背后暗藏着不少风险。数据分析显示，手术类项目是纠纷绝对重灾区，而 "效果不符预期""术后感染""机构无资质经营" 成为引发纠纷的三大核心原因，62.1% 的纠纷集中在玻尿酸注射、双眼皮手术、隆胸等热门项目中，普通消费者需重点警惕。此外，两类特殊场景的风险需额外关注：一是 "修复类" 项目，纠纷占比达 23.1%，因术前基础条件差、修复难度高，效果不确定性更大；二是跨境医美，因管辖权认定难、鉴定标准不一致，维权成本远高于境内消费。</p>
 
-<!-- 嵌入图8：HTML交互图表 -->
-<p>图8：一级服务类型纠纷扇形图（鼠标悬停可查看详细数据）</p>
-<iframe class="chart-iframe" src="images/一级服务类型纠纷扇形图.html"></iframe>
-# === 生成图8：一级服务类型纠纷扇形图 ===
-if (!require(plotly)) {
-  install.packages("plotly")
-  library(plotly)
-}
-if (!require(htmlwidgets)) {
-  install.packages("htmlwidgets")
-  library(htmlwidgets)
-}
-
-# 数据
-data <- data.frame(
-  服务类型 = c("手术类", "注射类", "护理类", "其他"),
-  案件数 = c(57, 38, 9, 4),
-  占比 = c(0.528, 0.352, 0.083, 0.037),
-  平均诉求金额 = c(8.6, 6.3, 2.8, 2.5),
-  高频纠纷原因 = c(
-    "效果不符（42%）、资质问题（35%）",
-    "感染（38.6%）、效果不符（27.3%）",
-    "虚假宣传（44.4%）、服务未达约定（33.3%）",
-    "价格纠纷（50%）、合同履行争议（37.5%）"
-  )
-)
-
-# 绘图
-fig <- plot_ly(
-  data,
-  labels = ~服务类型,
-  values = ~案件数,
-  type = 'pie',
-  textinfo = 'label+percent',
-  hoverinfo = 'text',
-  text = ~paste(
-    '<b>服务类型:</b> ', 服务类型,
-    '<br><b>案件数:</b> ', 案件数,
-    '<br><b>占比:</b> ', round(占比*100, 1), '%',
-    '<br><b>平均诉求金额:</b> ', 平均诉求金额, '万元',
-    '<br><b>高频纠纷原因:</b><br>', 高频纠纷原因
-  ),
-  marker = list(
-    colors = c('#4e79a7', '#f28e2c', '#e15759', '#76b7b2'),
-    line = list(color = '#FFFFFF', width = 2)
-  ),
-  hoverlabel = list(
-    bgcolor = "white",
-    font = list(size = 12)
-  )
-)
-
-fig <- fig %>% layout(
-  title = list(
-    text = "<b>医疗美容服务纠纷分布</b>",
-    x = 0.5,
-    font = list(size = 18)
-  ),
-  showlegend = TRUE,
-  legend = list(
-    orientation = "h",
-    x = 0.5,
-    xanchor = "center",
-    y = -0.1
-  )
-)
-
-# 保存为可嵌入的HTML片段（自包含）
-saveWidget(fig, file = "chart8_embed.html", selfcontained = TRUE, libdir = "lib")
-
-cat("图8嵌入HTML已生成: chart8_embed.html\n")
-cat("使用方法：\n")
-cat("1. 用文本编辑器打开 chart8_embed.html\n")
-cat("2. 复制 <body> 标签内的所有内容\n")
-cat("3. 粘贴到主HTML中需要显示图8的位置\n")
+<!-- 嵌入图8 -->
+<p>图8：一级服务类型纠纷扇形图</p>
+<iframe class="chart-iframe" src="images/一级饼图.png"></iframe>
 
 <p>从一级服务类型的纠纷分布来看，手术类项目的纠纷占比高达 52.8%，远超其他类型，且平均诉求金额 8.6 万元，是所有服务类型中最高的。这一数据印证了手术类项目因侵入性强、操作复杂度高，风险系数显著高于其他项目。注射类项目紧随其后，纠纷占比 35.2%，平均诉求金额 6.3 万元，虽低于手术类，但因涉及产品质量、注射剂量等多重变量，纠纷发生率同样居高不下。相比之下，护理类和其他非侵入性项目的纠纷占比仅为 8.3% 和 3.7%，平均诉求金额也不足 3 万元，风险相对较低。</p>
 
