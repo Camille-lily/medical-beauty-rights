@@ -1,0 +1,1 @@
+# medical-beauty-rights
