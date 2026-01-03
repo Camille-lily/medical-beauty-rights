@@ -43,465 +43,6 @@
 <p>图1：医疗美容纠纷案件核心结论概览图</p>
 <img src="images/核心结论概览图.png" alt="核心结论概览图" style="width:100%;height:auto;">
 
-<!-- 图1：诉求金额 vs 判决金额箱线图（交互） -->
-<p>图1：诉求金额 vs 判决金额分布（点击按钮查看TOP3缩水案例）</p>
-<div id="plotly-boxplot" style="width:100%;height:600px;"></div>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-// # 创建多维度卡片组合的核心结论概览图
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from matplotlib.patches import FancyBboxPatch, Rectangle
-import numpy as np
-
-# 设置图表样式
-plt.rcParams['font.sans-serif'] = ['WenQuanYi Zen Hei']
-plt.rcParams['axes.unicode_minus'] = False
-plt.rcParams['font.size'] = 10
-plt.rcParams['figure.dpi'] = 300
-plt.rcParams['savefig.dpi'] = 300
-
-# 创建图表
-fig, ax = plt.subplots(figsize=(16, 12))
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 10)
-ax.axis('off')
-
-# 定义卡片颜色方案
-colors = [
-    '#2E86AB',  # 蓝色 - 全额胜诉率
-    '#A23B72',  # 紫红色 - 判决金额中位数
-    '#F18F01',  # 橙色 - 无资质机构纠纷占比
-    '#C73E1D'   # 红色 - 金额缩水案件占比
-]
-
-# 定义卡片位置和大小
-card_positions = [
-    (1, 6, 4, 3.5),   # 左上卡片：全额胜诉率 (x, y, width, height)
-    (5.5, 6, 4, 3.5), # 右上卡片：判决金额中位数
-    (1, 1.5, 4, 3.5), # 左下卡片：无资质机构纠纷占比
-    (5.5, 1.5, 4, 3.5)# 右下卡片：金额缩水案件占比
-]
-
-# 核心指标数据
-indicators = [
-    {
-        'title': '全额胜诉率',
-        'value': '1.9%',
-        'detail': '2/108 份文书',
-        'description': '原告全部诉求获得法院支持的案件比例',
-        'color': colors[0]
-    },
-    {
-        'title': '判决金额中位数',
-        'value': '47,500 元',
-        'detail': '基于 89/108 份有效文书',
-        'description': '所有案件判决金额的中间值，反映赔偿水平',
-        'color': colors[1]
-    },
-    {
-        'title': '无资质机构纠纷占比',
-        'value': '25.9%',
-        'detail': '28/108 份文书',
-        'description': '涉及无合法资质机构的纠纷案件比例',
-        'color': colors[2]
-    },
-    {
-        'title': '金额缩水案件占比',
-        'value': '83.0%',
-        'detail': '73/88 份有效对比文书',
-        'description': '判决金额低于原告诉求金额的案件比例',
-        'color': colors[3]
-    }
-]
-
-# 绘制每个卡片
-for i, (pos, indicator) in enumerate(zip(card_positions, indicators)):
-    x, y, w, h = pos
-    color = indicator['color']
-    
-    # 绘制卡片背景（带圆角）
-    bbox = FancyBboxPatch((x, y), w, h, 
-                         boxstyle="round,pad=0.05", 
-                         facecolor=color, 
-                         alpha=0.1,
-                         edgecolor=color, 
-                         linewidth=2)
-    ax.add_patch(bbox)
-    
-    # 绘制卡片标题
-    ax.text(x + w/2, y + h - 0.4, indicator['title'], 
-           fontsize=14, fontweight='bold', 
-           ha='center', va='center', 
-           color=color)
-    
-    # 绘制卡片数值（大号字体）
-    ax.text(x + w/2, y + h/2 + 0.2, indicator['value'], 
-           fontsize=28, fontweight='bold', 
-           ha='center', va='center', 
-           color=color)
-    
-    # 绘制数据来源（hover信息模拟）
-    # 用虚线框标注数据来源，模拟hover效果
-    detail_box = Rectangle((x + 0.5, y + 0.8), w - 1, 0.6, 
-                         facecolor='white', 
-                         edgecolor=color, 
-                         linewidth=1, 
-                         linestyle='--',
-                         alpha=0.8)
-    ax.add_patch(detail_box)
-    
-    ax.text(x + w/2, y + 1.1, f"数据来源：{indicator['detail']}", 
-           fontsize=9, 
-           ha='center', va='center', 
-           color=color,
-           style='italic')
-    
-    # 绘制卡片描述
-    ax.text(x + w/2, y + 0.4, indicator['description'], 
-           fontsize=10, 
-           ha='center', va='center', 
-           color='gray',
-           wrap=True)
-
-# 添加总标题
-ax.text(5, 9.5, '医疗服务纠纷案件核心结论概览', 
-       fontsize=24, fontweight='bold', 
-       ha='center', va='center', 
-       color='#333333')
-
-# 添加副标题
-ax.text(5, 9.1, '基于108份法院裁判文书的数据分析', 
-       fontsize=14, 
-       ha='center', va='center', 
-       color='#666666',
-       style='italic')
-
-# 添加说明文字（解释hover效果）
-ax.text(5, 0.5, '注：每个卡片中的虚线框内显示数据来源详情，模拟hover交互效果', 
-       fontsize=10, 
-       ha='center', va='center', 
-       color='#999999')
-
-# 调整布局
-plt.tight_layout()
-
-# 保存图表
-plt.savefig('/mnt/核心结论概览图.png', dpi=300, bbox_inches='tight', 
-            facecolor='white', edgecolor='none')
-plt.close()
-
-print("核心结论概览图已生成完成！")
-print("\n图表制作详情：")
-print("1. 图表类型：多维度卡片组合式信息图")
-print("2. 包含指标：4个核心业务指标")
-print("3. 设计特点：")
-print("   - 每个指标使用不同颜色区分，便于识别")
-print("   - 大号字体突出显示核心数值，提高可读性")
-print("   - 虚线框标注数据来源，模拟hover交互效果")
-print("   - 圆角卡片设计，提升视觉美观度")
-print("4. 数据来源：所有数据基于108份医疗服务纠纷案件裁判文书")
-
-# 输出图表文件路径
-print(f"\n图表保存路径：/mnt/核心结论概览图.png")
-
-
-
-
-
-
-
-
-
-
-
-import plotly.graph_objects as go
-import plotly.io as pio
-
-# 设置主题
-pio.templates.default = 'plotly_white'
-
-# 准备hover信息
-hover_texts = []
-for label, size, pct in zip(labels, sizes, percentages):
-    if label in typical_cases:
-        case = typical_cases[label]
-        # 格式化案例信息
-        hover_info = f"""
-{label}
-案件数: {size}件 ({pct}%)
-
-典型案例详情:
-案件编号: {case['案件编号']}
-审理法院: {case['审理法院']}
-裁判日期: {case['裁判日期']}
-判决金额: {case['判决金额']}
-判决结果: {case['判决结果'][:120]}...
-        """.strip()
-    else:
-        hover_info = f"{label}\n案件数: {size}件 ({pct}%)\n暂无典型案例信息"
-    
-    hover_texts.append(hover_info)
-
-# 创建交互式图表
-fig = go.Figure(data=[go.Pie(
-    labels=labels,
-    values=sizes,
-    hovertext=hover_texts,
-    hoverinfo='text',
-    textinfo='label+value+percent',
-    textposition='inside',
-    marker=dict(colors=colors, line=dict(color='white', width=2)),
-    pull=[0.05] * len(labels),
-    sort=False
-)])
-
-# 设置布局
-fig.update_layout(
-    title=dict(
-        text='维权成功率分布图（交互式）<br>（按判决结果分类，hover查看典型案例）',
-        font=dict(size=18, color='#2C3E50'),
-        x=0.5
-    ),
-    legend=dict(
-        title=dict(text='判决结果分类', font=dict(size=14, color='#2C3E50')),
-        x=1.05,
-        y=0.5,
-        bgcolor='rgba(255, 255, 255, 0.8)'
-    ),
-    width=900,
-    height=700,
-    margin=dict(l=50, r=200, t=100, b=50)
-)
-
-# 设置文本样式
-fig.update_traces(
-    textfont=dict(size=12, color='white'),
-    hoverlabel=dict(
-        font=dict(size=11, family='Arial'),
-        bgcolor='#2C3E50',
-        bordercolor='#ECF0F1'
-    )
-)
-
-# 保存为HTML和图片
-fig.write_html('/mnt/维权成功率分布图_交互式.html')
-fig.write_image('/mnt/维权成功率分布图_交互式_图片版.png', width=900, height=700, scale=3)
-
-
-
-
-
-
-
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import plotly.io as pio
-
-# 设置plotly配置
-pio.templates.default = "plotly_white"
-pio.renderers.default = "png"
-
-# 读取清洗后的数据
-df = pd.read_csv('/mnt/清洗后金额数据.csv')
-
-# 准备数据
-claim_amounts = df['诉求金额（万元）'].dropna()
-judge_amounts = df['判决金额（万元）'].dropna()
-
-# 计算统计指标
-claim_stats = {
-    'min': claim_amounts.min(),
-    'median': claim_amounts.median(),
-    'max': claim_amounts.max(),
-    'q1': claim_amounts.quantile(0.25),
-    'q3': claim_amounts.quantile(0.75)
-}
-
-judge_stats = {
-    'min': judge_amounts.min(),
-    'median': judge_amounts.median(),
-    'max': judge_amounts.max(),
-    'q1': judge_amounts.quantile(0.25),
-    'q3': judge_amounts.quantile(0.75)
-}
-
-# 找出金额缩水TOP3案例
-top3_cases = df.nlargest(3, '金额差异（万元）')[
-    ['案件序号', '案件编号', '审理法院', '诉求金额（万元）', '判决金额（万元）', '金额差异（万元）', '判决结果']
-].copy()
-
-# 创建TOP3案例的HTML格式说明文本
-top3_text = "<b>金额缩水TOP3案例：</b><br><br>"
-for i, (idx, row) in enumerate(top3_cases.iterrows(), 1):
-    top3_text += f"<b>TOP {i}：</b><br>"
-    top3_text += f"案件编号：{row['案件编号']}<br>"
-    top3_text += f"审理法院：{row['审理法院']}<br>"
-    top3_text += f"诉求金额：{row['诉求金额（万元）']:.2f} 万元<br>"
-    top3_text += f"判决金额：{row['判决金额（万元）']:.2f} 万元<br>"
-    top3_text += f"金额缩水：{row['金额差异（万元）']:.2f} 万元<br>"
-    # 限制判决结果长度，避免显示过长
-    result_text = str(row['判决结果'])[:150] + "..." if len(str(row['判决结果'])) > 150 else str(row['判决结果'])
-    top3_text += f"判决结果：{result_text}<br><br>"
-
-# 创建子图：主图为箱线图，右侧为TOP3案例信息（初始隐藏）
-fig = make_subplots(
-    rows=1, cols=2,
-    column_widths=[0.7, 0.3],
-    specs=[[{"type": "box"}, {"type": "scatter", "visible": False}]],
-    subplot_titles=("诉求金额 vs 判决金额分布", "金额缩水TOP3案例")
-)
-
-# 添加诉求金额箱线图
-fig.add_trace(
-    go.Box(
-        y=claim_amounts,
-        name="诉求金额（万元）",
-        marker=dict(color="#2E86AB", size=6),
-        line=dict(color="#2E86AB", width=2),
-        median=dict(color="#A23B72", width=3),
-        hovertemplate=
-        "<b>诉求金额</b><br>"
-        "最小值：%{y[0]:.2f} 万元<br>"
-        "中位数：%{median:.2f} 万元<br>"
-        "最大值：%{y[-1]:.2f} 万元<br>"
-        "<extra></extra>",
-        showlegend=True
-    ),
-    row=1, col=1
-)
-
-# 添加判决金额箱线图
-fig.add_trace(
-    go.Box(
-        y=judge_amounts,
-        name="判决金额（万元）",
-        marker=dict(color="#F18F01", size=6),
-        line=dict(color="#F18F01", width=2),
-        median=dict(color="#C73E1D", width=3),
-        hovertemplate=
-        "<b>判决金额</b><br>"
-        "最小值：%{y[0]:.2f} 万元<br>"
-        "中位数：%{median:.2f} 万元<br>"
-        "最大值：%{y[-1]:.2f} 万元<br>"
-        "<extra></extra>",
-        showlegend=True
-    ),
-    row=1, col=1
-)
-
-# 添加TOP3案例信息（作为隐藏的散点图，用于显示文本）
-fig.add_trace(
-    go.Scatter(
-        x=[0.5], y=[0.5],
-        mode="text",
-        text=top3_text,
-        textfont=dict(size=12, family="Arial"),
-        showlegend=False,
-        visible=False,
-        hoverinfo="none",
-        name="TOP3案例"
-    ),
-    row=1, col=2
-)
-
-# 添加按钮用于显示/隐藏TOP3案例
-fig.update_layout(
-    updatemenus=[
-        dict(
-            type="buttons",
-            direction="right",
-            showactive=True,
-            x=0.5,
-            y=-0.15,
-            xanchor="center",
-            yanchor="top",
-            buttons=[
-                dict(
-                    label="显示金额缩水TOP3案例",
-                    method="update",
-                    args=[
-                        {"visible": [True, True, True]},  # 显示所有轨迹
-                        {"title": "诉求金额 vs 判决金额分布（含TOP3缩水案例）"}
-                    ]
-                ),
-                dict(
-                    label="隐藏TOP3案例",
-                    method="update",
-                    args=[
-                        {"visible": [True, True, False]},  # 隐藏TOP3案例轨迹
-                        {"title": "诉求金额 vs 判决金额分布"}
-                    ]
-                )
-            ]
-        )
-    ]
-)
-
-# 设置图表样式
-fig.update_layout(
-    title=dict(
-        text="诉求金额 vs 判决金额分布",
-        font=dict(size=18, weight="bold", family="Arial"),
-        x=0.5,
-        xanchor="center"
-    ),
-    yaxis=dict(
-        title=dict(
-            text="金额（万元）",
-            font=dict(size=14, weight="bold", family="Arial"),
-            color="#333333"
-        ),
-        tickfont=dict(size=12, family="Arial"),
-        gridcolor="#E5E5E5",
-        gridwidth=1
-    ),
-    xaxis=dict(
-        tickfont=dict(size=12, family="Arial"),
-        gridcolor="#E5E5E5",
-        gridwidth=1
-    ),
-    legend=dict(
-        title=dict(text="金额类型", font=dict(size=12, weight="bold")),
-        font=dict(size=11, family="Arial"),
-        x=0.02,
-        y=0.98,
-        xanchor="left",
-        yanchor="top",
-        bgcolor="rgba(255, 255, 255, 0.8)",
-        bordercolor="#E5E5E5",
-        borderwidth=1
-    ),
-    width=1200,
-    height=600,
-    margin=dict(l=50, r=50, t=80, b=100),
-    paper_bgcolor="white",
-    plot_bgcolor="white"
-)
-
-# 设置右侧子图样式（隐藏坐标轴）
-fig.update_xaxes(visible=False, row=1, col=2)
-fig.update_yaxes(visible=False, row=1, col=2)
-
-# 保存图表为HTML格式（支持交互）和PNG格式
-fig.write_html("/mnt/诉求金额vs判决金额_动态箱线图.html")
-fig.write_image("/mnt/诉求金额vs判决金额_箱线图.png", scale=2)
-
-print("图表已生成完成！")
-print(f"交互式HTML图表：/mnt/诉求金额vs判决金额_动态箱线图.html")
-print(f"静态PNG图表：/mnt/诉求金额vs判决金额_箱线图.png")
-
-# 显示关键统计信息摘要
-print(f"\n=== 关键统计信息摘要 ===")
-print(f"诉求金额（万元）：")
-print(f"  最小值：{claim_stats['min']:.2f} | 中位数：{claim_stats['median']:.2f} | 最大值：{claim_stats['max']:.2f}")
-print(f"判决金额（万元）：")
-print(f"  最小值：{judge_stats['min']:.2f} | 中位数：{judge_stats['median']:.2f} | 最大值：{judge_stats['max']:.2f}")
-print(f"金额缩水率（中位数）：{((claim_stats['median'] - judge_stats['median']) / claim_stats['median'] * 100):.1f}%")
-</script>
-
 <h2>第一章 赢面小、金额少：医美维权的核心困境透视</h2>
 
 <p>百份裁判文书勾勒出的医美维权图景，核心关键词是 "赢面小（全额支持率不足 5%）、金额少（判决金额不足诉求 1/3）"。对于绝大多数遭遇医美事故的消费者而言，维权之路不仅漫长坎坷，最终能获得的赔偿也往往与预期相去甚远，陷入 "维权成本高、收益低" 的两难境地，不少人在中途选择放弃。</p>
@@ -553,6 +94,78 @@ print(f"金额缩水率（中位数）：{((claim_stats['median'] - judge_stats[
 <!-- 嵌入图8：HTML交互图表 -->
 <p>图8：一级服务类型纠纷扇形图（鼠标悬停可查看详细数据）</p>
 <iframe class="chart-iframe" src="images/一级服务类型纠纷扇形图.html"></iframe>
+# === 生成图8：一级服务类型纠纷扇形图 ===
+if (!require(plotly)) {
+  install.packages("plotly")
+  library(plotly)
+}
+if (!require(htmlwidgets)) {
+  install.packages("htmlwidgets")
+  library(htmlwidgets)
+}
+
+# 数据
+data <- data.frame(
+  服务类型 = c("手术类", "注射类", "护理类", "其他"),
+  案件数 = c(57, 38, 9, 4),
+  占比 = c(0.528, 0.352, 0.083, 0.037),
+  平均诉求金额 = c(8.6, 6.3, 2.8, 2.5),
+  高频纠纷原因 = c(
+    "效果不符（42%）、资质问题（35%）",
+    "感染（38.6%）、效果不符（27.3%）",
+    "虚假宣传（44.4%）、服务未达约定（33.3%）",
+    "价格纠纷（50%）、合同履行争议（37.5%）"
+  )
+)
+
+# 绘图
+fig <- plot_ly(
+  data,
+  labels = ~服务类型,
+  values = ~案件数,
+  type = 'pie',
+  textinfo = 'label+percent',
+  hoverinfo = 'text',
+  text = ~paste(
+    '<b>服务类型:</b> ', 服务类型,
+    '<br><b>案件数:</b> ', 案件数,
+    '<br><b>占比:</b> ', round(占比*100, 1), '%',
+    '<br><b>平均诉求金额:</b> ', 平均诉求金额, '万元',
+    '<br><b>高频纠纷原因:</b><br>', 高频纠纷原因
+  ),
+  marker = list(
+    colors = c('#4e79a7', '#f28e2c', '#e15759', '#76b7b2'),
+    line = list(color = '#FFFFFF', width = 2)
+  ),
+  hoverlabel = list(
+    bgcolor = "white",
+    font = list(size = 12)
+  )
+)
+
+fig <- fig %>% layout(
+  title = list(
+    text = "<b>医疗美容服务纠纷分布</b>",
+    x = 0.5,
+    font = list(size = 18)
+  ),
+  showlegend = TRUE,
+  legend = list(
+    orientation = "h",
+    x = 0.5,
+    xanchor = "center",
+    y = -0.1
+  )
+)
+
+# 保存为可嵌入的HTML片段（自包含）
+saveWidget(fig, file = "chart8_embed.html", selfcontained = TRUE, libdir = "lib")
+
+cat("图8嵌入HTML已生成: chart8_embed.html\n")
+cat("使用方法：\n")
+cat("1. 用文本编辑器打开 chart8_embed.html\n")
+cat("2. 复制 <body> 标签内的所有内容\n")
+cat("3. 粘贴到主HTML中需要显示图8的位置\n")
 
 <p>从一级服务类型的纠纷分布来看，手术类项目的纠纷占比高达 52.8%，远超其他类型，且平均诉求金额 8.6 万元，是所有服务类型中最高的。这一数据印证了手术类项目因侵入性强、操作复杂度高，风险系数显著高于其他项目。注射类项目紧随其后，纠纷占比 35.2%，平均诉求金额 6.3 万元，虽低于手术类，但因涉及产品质量、注射剂量等多重变量，纠纷发生率同样居高不下。相比之下，护理类和其他非侵入性项目的纠纷占比仅为 8.3% 和 3.7%，平均诉求金额也不足 3 万元，风险相对较低。</p>
 
