@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医疗美容纠纷案件核心结论概览</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .hover-info {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 2px solid var(--color);
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 100;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .card:hover .hover-info {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">医疗美容纠纷案件核心结论概览</h1>
+            <p class="text-gray-600">基于108份医疗美容纠纷案件判决书数据分析 | 鼠标悬停查看详细数据来源</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- 卡片1: 全部支持案件占比 -->
+            <div class="card bg-white rounded-xl p-8 text-center relative border-t-4 border-[#FF6B6B]" style="--color: #FF6B6B;">
+                <div class="hover-info" style="top: 10px; right: 10px;">
+                    4.63% = 5/108 份文书
+                </div>
+                <div class="text-[#FF6B6B] text-4xl font-bold mb-4">4.63%</div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">全部支持案件占比</h3>
+                <p class="text-gray-600">判决结果</p>
+                <p class="text-gray-500 mt-2">5/108 件</p>
+            </div>
+            
+            <!-- 卡片2: 判决金额中位数 -->
+            <div class="card bg-white rounded-xl p-8 text-center relative border-t-4 border-[#4ECDC4]" style="--color: #4ECDC4;">
+                <div class="hover-info" style="top: 10px; right: 10px;">
+                    判决金额中位数：¥30,070<br>
+                    基于108份文书<br>
+                    金额范围：¥0-914,230.94
+                </div>
+                <div class="text-[#4ECDC4] text-4xl font-bold mb-4">¥30,070</div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">判决金额中位数</h3>
+                <p class="text-gray-600">人民币（元）</p>
+                <p class="text-gray-500 mt-2">范围：¥0-914,230.94</p>
+            </div>
+            
+            <!-- 卡片3: 无资质机构纠纷占比 -->
+            <div class="card bg-white rounded-xl p-8 text-center relative border-t-4 border-[#45B7D1]" style="--color: #45B7D1;">
+                <div class="hover-info" style="top: 10px; right: 10px;">
+                    68.5% = 74/108 份文书
+                </div>
+                <div class="text-[#45B7D1] text-4xl font-bold mb-4">68.5%</div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">无资质机构纠纷占比</h3>
+                <p class="text-gray-600">机构资质情况</p>
+                <p class="text-gray-500 mt-2">74/108 件</p>
+            </div>
+            
+            <!-- 卡片4: 金额缩水案件占比 -->
+            <div class="card bg-white rounded-xl p-8 text-center relative border-t-4 border-[#96CEB4]" style="--color: #96CEB4;">
+                <div class="hover-info" style="top: 10px; right: 10px;">
+                    88.9% = 96/108 份文书
+                </div>
+                <div class="text-[#96CEB4] text-4xl font-bold mb-4">88.9%</div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">金额缩水案件占比</h3>
+                <p class="text-gray-600">诉求与判决差异</p>
+                <p class="text-gray-500 mt-2">96/108 件</p>
+            </div>
+        </div>
+        
+        <div class="mt-12 bg-white rounded-xl p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">数据解读</h3>
+            <ul class="space-y-2 text-gray-700">
+                <li>• <strong>胜诉率低</strong>：仅4.63%的案件全部支持原告诉求，反映医疗美容纠纷举证难度大</li>
+                <li>• <strong>赔偿差异大</strong>：判决金额中位数3万元，但最高达91万元，显示案件严重程度差异显著</li>
+                <li>• <strong>资质问题突出</strong>：近7成纠纷涉及无资质或资质不明机构，行业监管亟待加强</li>
+                <li>• <strong>预期与实际差距大</strong>：88.9%的案件判决金额低于原告诉求，提示当事人合理预期的重要性</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
